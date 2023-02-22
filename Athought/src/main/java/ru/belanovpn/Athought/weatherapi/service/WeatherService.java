@@ -7,9 +7,9 @@ import ru.belanovpn.Athought.weatherapi.converter.WeatherEntityDTOConverter;
 import ru.belanovpn.Athought.weatherapi.dto.WeatherEntityDto;
 import ru.belanovpn.Athought.weatherapi.util.GetWeatherContent;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class WeatherService {
     private final GetWeatherContent weatherContent;
     private final WeatherEntityDTOConverter converter;
@@ -22,7 +22,7 @@ public class WeatherService {
             log.error("argument is empty");
         }
         return String.format("Сейчас в городе %s, %d\u00B0C.\nОщущается как %d\u00B0C.\nСкорость ветра - %d м/с." +
-                        "\nДавление %d гПа\nОтносительная влажность воздуха %d%% ",
+                        "\nДавление %d гПа\nОтносительная влажность воздуха %d%%",
                 entityDto.getCityName(), entityDto.getTemperature(), entityDto.getFeelsLike(),
                 entityDto.getWindSpeed(), entityDto.getPressure(), entityDto.getHumidity());
     }

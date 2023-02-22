@@ -1,22 +1,20 @@
 package ru.belanovpn.Athought.weatherapi.util;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import ru.belanovpn.Athought.weatherapi.entity.WeatherEntity;
-import ru.belanovpn.Athought.weatherapi.repository.WeatherEntityRepository;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.LocalDateTime;
-
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class GetWeatherContent {
 
-    private final WeatherEntityRepository weatherEntityRepository;
 
 
     private String getURL(String cityName) {
@@ -32,13 +30,14 @@ public class GetWeatherContent {
             }
             reader.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Неверный URL: {}",cityName);
         }
         return resultString.toString();
     }
 
     private JSONObject getJson(String cityName) {
-        String jsonObjectFromUrl = getURL(String.format("http://api.openweathermap.org/data/2.5/weather?q=%s&appid=3b8f8d77b8801d4d38f90c3fcbbce50e&units=metric&lang=ru", cityName.trim()));
+        String jsonObjectFromUrl = getURL(
+                String.format("http://api.openweathermap.org/data/2.5/weather?q=%s&appid=3b8f8d77b8801d4d38f90c3fcbbce50e&units=metric&lang=ru", cityName.trim()));
         return new JSONObject(jsonObjectFromUrl);
     }
 
@@ -55,8 +54,6 @@ public class GetWeatherContent {
                 .createdAt(LocalDateTime.now())
                 .build();
     }
-
-
 
 
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import ru.belanovpn.Athought.service.TelegramBot;
+import ru.belanovpn.Athought.controller.TelegramBot;
 @Slf4j
 @Component
 @RequiredArgsConstructor

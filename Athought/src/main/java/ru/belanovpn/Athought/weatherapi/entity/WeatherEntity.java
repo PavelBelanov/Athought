@@ -1,7 +1,5 @@
 package ru.belanovpn.Athought.weatherapi.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,9 +11,8 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name="weather_table")
 public class WeatherEntity {
-    @Id
+
     private long id;
 
     private String cityName;
@@ -29,6 +26,7 @@ public class WeatherEntity {
     private int humidity;
 
     private int windSpeed;
+
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdAt;

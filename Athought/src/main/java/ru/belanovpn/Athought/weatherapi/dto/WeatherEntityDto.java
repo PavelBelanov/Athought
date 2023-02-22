@@ -20,5 +20,6 @@ public class WeatherEntityDto implements Serializable {
     private final int pressure;
     private final int humidity;
     private final int windSpeed;
+    private String description;
     private final LocalDateTime createdAt;
 }

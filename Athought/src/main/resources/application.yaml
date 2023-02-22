@@ -1,4 +1,4 @@
-bot.name: Athought
+bot.name: SimplyWeather
 bot.token: 6171566104:AAHPuVL-EtqfxUFyNRI5GnkFdB8upMSo3UE
 spring:
   datasource:
