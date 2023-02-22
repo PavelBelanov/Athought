@@ -22,45 +22,42 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig config;
     private final WeatherService weatherService;
-
-
     private static final String HELP_MESSAGE = EmojiParser.parseToUnicode("При помощи данного бота, вы сможете узнать погоду в любой точке мира!\n" +
             "Все что нужно сделать - это написать боту название города! Удачи" + ":wink:");
 
-
-    public TelegramBot(BotConfig config,  WeatherService weatherService) {
+    public TelegramBot(BotConfig config, WeatherService weatherService) {
         this.config = config;
         this.weatherService = weatherService;
         List<BotCommand> listOf = new ArrayList<>();
         listOf.add(new BotCommand("/start", "get a welcome message"));
         listOf.add(new BotCommand("/help", "how to use this bot"));
-
         try {
             this.execute(new SetMyCommands(listOf, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
             log.error("Error setting bot`s command list: {}", e.getMessage());
         }
-
     }
-
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
             String name = update.getMessage().getChat().getFirstName();
+            String userName = update.getMessage().getChat().getUserName();
 
             switch (messageText) {
                 case "/start" -> {
                     startCommandReceived(chatId, name);
+                    log.info("Sending start message: {}, username: {}",name, userName);
                 }
                 case "/help" -> prepareAndSendMessage(chatId, HELP_MESSAGE);
-                default -> executeMessage(prepareAndSendWeatherOrThrow(chatId, messageText));
+                default -> {
+                    executeMessage(prepareAndSendWeatherOrThrow(chatId, messageText));
+                    log.info("Sending answer: {}, username: {}", name, userName);
+                }
             }
         }
-
     }
-
 
     @Override
     public String getBotUsername() {
@@ -74,13 +71,12 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void startCommandReceived(long chatId, String name) {
         String answer = EmojiParser.parseToUnicode
-                (String.format("Привет, %s.\n Добро пожаловать!\n Если тебе нужна помощь по работе с ботом\n" +
+                (String.format("Привет, %s!\nДобро пожаловать!\nЕсли тебе нужна помощь по работе с ботом\n" +
                         " Жми сюда /help", name)
                         + " :grinning:");
         log.info("Response to user {} sent", name);
         prepareAndSendMessage(chatId, answer);
     }
-
 
     private void executeMessage(SendMessage message) {
         try {
@@ -90,23 +86,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-//    private void registerUser(Message msg) {
-//        if (userRepository.findById(msg.getChatId()).isEmpty()) {
-//            var chatId = msg.getChatId();
-//            var chat = msg.getChat();
-//            User user = User.builder()
-//                    .chatId(chatId)
-//                    .firstName(chat.getFirstName())
-//                    .lastName(chat.getLastName())
-//                    .userName(chat.getUserName())
-//                    .registrationAt(LocalDateTime.now())
-//                    .build();
-//            userRepository.saveAndFlush(user);
-//            log.info("user {} saved", user);
-//        }
-//    }
-
-    public void prepareAndSendMessage(long chatId, String textMessage) {
+    private void prepareAndSendMessage(long chatId, String textMessage) {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
         message.setText(textMessage);
@@ -123,6 +103,4 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
         return message;
     }
-
-
 }

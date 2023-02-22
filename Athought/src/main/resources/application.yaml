@@ -1,14 +1,3 @@
 bot.name: SimplyWeather
 bot.token: 6171566104:AAHPuVL-EtqfxUFyNRI5GnkFdB8upMSo3UE
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost/tg_bot
-    username: postgres
-    password: root
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
-    defer-datasource-initialization: false
+
